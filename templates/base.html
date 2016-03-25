@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+{% load static %}
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+
+<html class="no-js"> <!--<![endif]-->
+<head>
+
+    <link rel="shortcut icon" href="{%  static 'img/favicon.ico' %}">
+
+    <!-- meta -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{% block title %}{% endblock %} - tripPlanter</title>
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/animate.css'%}">
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <!--  Necessary scripts  -->
+    <script type="text/javascript" src="{% static 'js/jquery-2.1.3.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/jQuery.scrollSpeed.js'%}"></script>
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" type="text/javascript"></script>
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="{% static 'js/buttons.js' %}"></script>
+    <script type="text/javascript">stLight.options({publisher: "b3afc0c0-bdb7-4993-a4a0-99cb820bf11f", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+    <!-- search scripts -->
+
+    <script>
+        $(function() {
+            $("#trips").autocomplete({
+                source: "{% url 'search_trips' %}",
+                minLength: 2,
+                select: function(event, ui) {
+                    event.preventDefault();
+                    $('#trips').val(ui.item.label);
+                    $(location).attr('href', '/triplanter/trip/' + ui.item.id)
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Plan search script-->
+    <script>
+        $(document).ready(function() {
+            $('#locationa').click(function() {
+                var newurl = '/triplanter/plan/' + $('#location').val();
+                $('#locationa').attr('href', newurl);
+            });
+        });
+    </script>
+
+
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'img/logo.png' %}" alt="Site Logo">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="active"><a href={% url 'index' %}>Home</a></li>
+                <li><a href={% url 'explore' %}>Explore</a></li>
+                <li><a href={% url 'about' %}>About</a></li>
+                {% if not user.is_authenticated %}
+                    <li><a href={% url 'auth_login' %}>Login</a></li>
+                {% else %}
+                    <li>
+                        <a  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{ user.username }}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="{% url 'mytrips'%}">My Trips</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+
+            </ul>
+        </div><!-- end of /.navbar-collapse -->
+    </div><!-- end of /.container -->
+</nav>
+
+<main>
+
+    <div class="container-fluid">
+
+
+        <div class="row">
+
+            <!-- blog-contents -->
+            <div class="col-md-8">
+
+                {% block main %}{% endblock %}
+
+
+
+            </div>
+            <!-- end of blog-contents -->
+
+            <!-- sidebar -->
+            <aside class="col-md-4 col-sm-8 col-xs-8">
+                <div class="sidebar">
+                    {% block sidebar %}{% endblock %}
+                </div>
+            </aside>
+            <!-- end of sidebar -->
+
+        </div>
+    </div> <!-- end of /.container -->
+</main>
+
+
+
+
+<!-- smooth-scroll
+
+<script>
+    $(function() {
+        jQuery.scrollSpeed(100, 1000);
+    });
+</script>
+ -->
+</body>
+</html>

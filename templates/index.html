@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{%load static%}
+
+{% block title %}Home{% endblock %}
+{% block main %}
+                        <article class="blog-item">
+                        <h4>Planters Suggest:</h4>
+                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                              <!-- Indicators -->
+                            {% with suggested_trips|first as initial %}
+                              <ol class="carousel-indicators">
+                                {% for trip in suggested_trips %}
+                                <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}" class="{% ifequal trip initial %}active{% endifequal %}"></li>
+                                {% endfor %}
+                              </ol>
+
+                              <!-- Wrapper for slides -->
+                              <!-- The Carousel is automatically populated with photographs from the trips that are -->
+                              <!-- marked as "suggested" in the database -->
+                              <div class="carousel-inner" role="listbox">
+                                {% for trip in suggested_trips %}
+                                <div class="item {% ifequal trip initial %} active {% endifequal %}">
+                                  <a href="{% url 'tripSummary' trip.id %}"><img src="{{ trip.photograph.url}}"></a>
+                                  <div class="carousel-caption"><h4>{{trip.title}}</h4></div>
+                                </div>
+                                {% endfor %}
+                            {% endwith %}
+
+                              <!-- Left and right controls -->
+                              <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                Previous<span class="fa fa-angle-left" aria-hidden="true"></span>
+                                <span></span>
+                              </a>
+                              <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                <span class="fa fa-angle-right" aria-hidden="true"></span>Next<span></span>
+                              </a>
+                            </div>
+                        </article> <!-- /.blog-item -->
+
+                        <article class="blog-item">
+                            <div class="row">
+                            <div class="search-widget">
+                                <div class="input-group margin-bottom-sm">
+                                    <input id="location" class="form-control" type="text" placeholder="Where are you going?">
+                                    <a id="locationa" href="" class="input-group-addon">
+                                        <i class="fa fa-search fa-fw"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="row">
+                            <p>Plan, Share, Enjoy!</p>
+                            </div>
+                        </article> <!-- /.blog-item -->
+{% endblock %}
+
+{% block sidebar %}
+
+    <div class="search-widget">
+
+        <div class="input-group margin-bottom-sm">
+            <input class="form-control" type="text" id="trips" placeholder="Search trips...">
+        </div>
+
+    </div>
+    <div class="well">
+    <h5>Top Trips!</h5>
+    <ul>
+        {% for trip in suggested_trips %}
+        <li><a href="{% url 'tripSummary' trip.id %}">{{trip.title}}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+
+
+
+
+    <!-- subscribe form -->
+
+    <!-- sidebar share buttons->
+    <div class="share-widget hidden-xs hidden-sm">
+        <ul class="social-share text-center">
+            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+        </ul>        
+    <-sidebar-share-button -->
+    </div> <!-- /.share-widget -->
+
+{% endblock %}
+
